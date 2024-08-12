@@ -4,6 +4,19 @@ fetch('data.json')
 .then(res => res.json())
 .then(data => uploadProducts(data));
 
+const icons ={
+    addToCart:"./assets/images/icon-add-to-cart.svg",
+    decrementQuantity: "./assets/images/icon-decrement-quantity.svg",
+    incrementQuantity: "./assets/images/icon-increment-quantity.svg",
+    orderConfirmed: "./assets/images/icon-order-confirmed.svg",
+    removeItem: "./assets/images/icon-remove-item.svg",
+    neutral: "./assets/images/icon-carbon-neutral.svg",
+}
+
+
+    
+
+// consoles()
 function uploadProducts(products){
     products.forEach(product => {
         const div = document.createElement('div');
@@ -13,7 +26,13 @@ function uploadProducts(products){
         img.alt = product.name;
 
         const button = document.createElement('button');
-        button.textContent = "add to cart"
+        const icon = document.createElement('img');
+        icon.src = icons.addToCart;
+        button.appendChild(icon);
+        button.innerHTML += " Add to cart";
+        button.addEventListener('click',e =>{
+            
+            consoles(e,button)})
 
         const small = document.createElement('small');
         small.textContent = product.category;
@@ -28,3 +47,30 @@ function uploadProducts(products){
         productsContainer.appendChild(div);
     });
 }
+
+
+
+function consoles(e, button){
+    // console.log(e.target)
+    let a = 1;
+    button.innerHTML = "";
+    button.classList.add('buttonAdd');
+    const iconPlus = document.createElement('img');
+    iconPlus.addEventListener('click', e => a++)
+    iconPlus.src = icons.incrementQuantity;
+    const iconMinus = document.createElement('img');
+    iconMinus.src = icons.decrementQuantity;
+    button.appendChild(iconMinus);
+    button.innerHTML += a;
+    button.appendChild(iconPlus);
+}
+
+// function add(e,a){
+//     a++
+//     return a
+// }
+
+// function createIcons(icon){
+//     const img = document.createElement('img');
+//     img.src = icon;
+// }

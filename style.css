@@ -41,6 +41,7 @@ main{
 section{
     h1{
         align-self:flex-start;
+        font-size: 40px;
         margin: 0 20px 15px 20px;
     }
 }

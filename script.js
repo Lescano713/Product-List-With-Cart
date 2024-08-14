@@ -85,6 +85,8 @@ function uploadingCart(){
     productsInCart.forEach(product =>{
         const div = document.createElement('div');
         div.classList.add('product-in-car');
+        const divText = document.createElement('div');
+        divText.classList.add('product-price');
         const h4 = document.createElement('h3');
         h4.textContent = product.pName;
         const pAmount = document.createElement('p');
@@ -94,7 +96,8 @@ function uploadingCart(){
         pPrice.textContent = product.pCost;
         const ptotalAmount = document.createElement('p');
 
-        div.append(h4,pAmount,pPrice,ptotalAmount,iconRemove);
+        divText.append(h4,pAmount,pPrice,ptotalAmount);
+        div.append(divText,iconRemove)
         ordersContainer.appendChild(div);
         
     })
@@ -103,13 +106,24 @@ function uploadingCart(){
 function orderTotal(totalAmount){
     totalAmount = 1;
     const div = document.createElement('div');
+    div.classList.add('order-total');
+
+    const divDelivery = document.createElement('div');
+    divDelivery.classList.add('delivery-container');
+    const pDelivery = document.createElement('p');
+    pDelivery.textContent = "This is a carbon-neutral delivery";
+    const imgDelivery = document.createElement('img');
+    imgDelivery.src = icons.neutral;
+
     const p = document.createElement('p');
     p.textContent = "Order Total";
     const h4 = document.createElement('h4');
-    h4.textContent = totalAmount
+    h4.textContent = `$${totalAmount}`
     const button = document.createElement('button');
     button.textContent = "Confirm Order";
-    div.append(p,h4,button);
+
+    divDelivery.append(imgDelivery,pDelivery);
+    div.append(p,h4,divDelivery,button);
     ordersContainer.appendChild(div);
 }
 

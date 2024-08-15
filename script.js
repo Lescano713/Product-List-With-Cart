@@ -66,9 +66,6 @@ function takeOffProducts(id){
 }
 
 
-
-
-
 function getObjects(name, cost,id){
     // let mas = 1;
     const product ={

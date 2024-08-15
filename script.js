@@ -3,7 +3,8 @@ const ordersContainer = document.querySelector('#orders');
 
 fetch('data.json')
 .then(res => res.json())
-.then(data => uploadProducts(data));
+.then(data =>{ uploadProducts(data); generateId(data)});
+
 
 
 const icons ={
@@ -19,8 +20,10 @@ const productsInCart = [];
 
 // uploadingCart();
 
-function generateId(div){
-    document.querySelectorAll('')
+function generateId(data){
+    data.forEach((item ,index)=>{
+        item.id = index + 1;
+    })
 }
     
 
@@ -40,7 +43,7 @@ function uploadProducts(products){
         button.appendChild(icon);
         button.innerHTML += " Add to cart";
         button.addEventListener('click',e =>{
-            buttonAddRemove(button,product.name,product.price)
+            buttonAddRemove(button,product.name,product.price,product.id, product.pQuantity)
             img.style.border = '3px solid red';});
 
         const small = document.createElement('small');
@@ -57,9 +60,13 @@ function uploadProducts(products){
     });
 }
 
-function takeOffProducts(name,cost){
+function takeOffProducts(name){
     // const product = document.querySelector('#'+ id);
-    productsInCart.find
+    const index = productsInCart.findIndex(product => product.name === name);
+    if (index !== -1) {
+        // Eliminar el elemento en el índice encontrado
+        productos.splice(index, 1);
+    }
 }
 
 function addElements(id){
@@ -68,21 +75,40 @@ function addElements(id){
 
 
 
-function getObjects(name, cost){
-    const product ={
-        pName: name,
-        pCost: cost,
+function getObjects(name, cost,id){
+    const existingProducts = productsInCart.find(products => products.pid === id);
+    if(existingProducts){
+        existingProducts.pQuantity = (existingProducts.pQuantity || 1) + 1;
+    }else{
+        const product ={
+            pName: name,
+            pCost: cost,
+            pId: id,
+            pQuantity: 1,
+        }
+        productsInCart.push(product);
     }
-    productsInCart.push(product);
-    uploadingCart();
-    orderTotal(product.pCost);
+    
+    uploadingCart(productsInCart);
+    orderTotal(products.pCost);
     console.log(productsInCart);
 }
 
-function uploadingCart(){
+function uploadingCart(array){
     ordersContainer.innerHTML = "";
     document.querySelector('section.order-section').style.background = "none";
-    productsInCart.forEach(product =>{
+
+    const uniqueProducts = array.reduce((acc, product) => {
+        if (!acc[product.pId]) {
+            acc[product.pId] = product;
+        } else {
+            acc[product.pId].pQuantity += product.pQuantity;
+        }
+        return acc;
+    }, {});
+
+
+    Object.values(uniqueProducts).forEach(product =>{
         const div = document.createElement('div');
         div.classList.add('product-in-car');
         const divText = document.createElement('div');
@@ -127,14 +153,13 @@ function orderTotal(totalAmount){
     ordersContainer.appendChild(div);
 }
 
-function buttonAddRemove(button,name,cost){
+function buttonAddRemove(button,name,cost,id,quantity){
     button.innerHTML = "";
     button.classList.add('buttonAdd');
     // console.log(e.target)
-    let amount = 1;
     
     const iconPlus = document.createElement('img');
-    iconPlus.addEventListener('click', e => getObjects(name,cost),  console.log(amount+1));
+    iconPlus.addEventListener('click', e => getObjects(name,cost,id));
 
     iconPlus.src = icons.incrementQuantity;
 
@@ -143,7 +168,7 @@ function buttonAddRemove(button,name,cost){
     iconMinus.src = icons.decrementQuantity;
     // button.innerHTML = `${iconMinus} ${amount} ${iconPlus}`;
     button.appendChild(iconMinus);
-    button.innerHTML += amount;
+    button.innerHTML += quantity;
     button.appendChild(iconPlus);
 }
 

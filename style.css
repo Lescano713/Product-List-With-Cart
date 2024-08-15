@@ -103,6 +103,11 @@ section{
     height: auto;
     padding: 1.5em;
     justify-content: space-between;
+    position: relative;
+    .default-text{
+        position: absolute;
+        bottom: 0px;
+    }
     #orders{
         display: grid;
         height: 100%;
@@ -148,6 +153,7 @@ section{
     'p h4'
     'delivery delivery'
     'button button';
+    position: relative;
     .delivery-container{
         display: flex;
         align-items: center;

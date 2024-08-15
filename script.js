@@ -43,7 +43,7 @@ function uploadProducts(products){
         button.appendChild(icon);
         button.innerHTML += " Add to cart";
         button.addEventListener('click',e =>{
-            buttonAddRemove(button,product.name,product.price,product.id, product.pQuantity)
+            buttonAddRemove(button,product.name,product.price,product.id)
             img.style.border = '3px solid red';});
 
         const small = document.createElement('small');
@@ -60,37 +60,30 @@ function uploadProducts(products){
     });
 }
 
-function takeOffProducts(name){
-    // const product = document.querySelector('#'+ id);
-    const index = productsInCart.findIndex(product => product.name === name);
-    if (index !== -1) {
-        // Eliminar el elemento en el índice encontrado
-        productos.splice(index, 1);
-    }
+function takeOffProducts(id){
+    findId(id).pQuantity -= 1;
+    uploadingCart(productsInCart)
 }
 
-function addElements(id){
 
-}
 
 
 
 function getObjects(name, cost,id){
-    const existingProducts = productsInCart.find(products => products.pid === id);
-    if(existingProducts){
-        existingProducts.pQuantity = (existingProducts.pQuantity || 1) + 1;
-    }else{
-        const product ={
-            pName: name,
-            pCost: cost,
-            pId: id,
-            pQuantity: 1,
-        }
-        productsInCart.push(product);
+    // let mas = 1;
+    const product ={
+        pName: name,
+        pCost: cost,
+        pId: id,
+        pQuantity: 1,
     }
     
+    if (!findId(id)) {
+        productsInCart.push(product);
+    } else {
+        findId(id).pQuantity += 1;
+    }
     uploadingCart(productsInCart);
-    orderTotal(products.pCost);
     console.log(productsInCart);
 }
 
@@ -98,17 +91,7 @@ function uploadingCart(array){
     ordersContainer.innerHTML = "";
     document.querySelector('section.order-section').style.background = "none";
 
-    const uniqueProducts = array.reduce((acc, product) => {
-        if (!acc[product.pId]) {
-            acc[product.pId] = product;
-        } else {
-            acc[product.pId].pQuantity += product.pQuantity;
-        }
-        return acc;
-    }, {});
-
-
-    Object.values(uniqueProducts).forEach(product =>{
+    array.forEach(product =>{
         const div = document.createElement('div');
         div.classList.add('product-in-car');
         const divText = document.createElement('div');
@@ -116,6 +99,7 @@ function uploadingCart(array){
         const h4 = document.createElement('h3');
         h4.textContent = product.pName;
         const pAmount = document.createElement('p');
+        pAmount.textContent = product.pQuantity;
         const iconRemove = document.createElement('img');
         iconRemove.src = icons.removeItem;
         const pPrice = document.createElement('p');
@@ -130,7 +114,7 @@ function uploadingCart(array){
 }
 
 function orderTotal(totalAmount){
-    totalAmount = 1;
+    // totalAmount = 1;
     const div = document.createElement('div');
     div.classList.add('order-total');
 
@@ -153,23 +137,39 @@ function orderTotal(totalAmount){
     ordersContainer.appendChild(div);
 }
 
-function buttonAddRemove(button,name,cost,id,quantity){
+function findId(id){
+    const existingProduct = productsInCart.find(p => p.pId === id);
+    return existingProduct
+}
+
+function buttonAddRemove(button,name,cost,id){
     button.innerHTML = "";
+    // let amount = 0;
+
+    // if(findId(id)){
+    //     amount = findId(id).pQuantity;
+    // }
     button.classList.add('buttonAdd');
-    // console.log(e.target)
-    
     const iconPlus = document.createElement('img');
-    iconPlus.addEventListener('click', e => getObjects(name,cost,id));
-
     iconPlus.src = icons.incrementQuantity;
-
     const iconMinus = document.createElement('img');
-    iconMinus.addEventListener('click', takeOffProducts(name,cost));
     iconMinus.src = icons.decrementQuantity;
-    // button.innerHTML = `${iconMinus} ${amount} ${iconPlus}`;
-    button.appendChild(iconMinus);
-    button.innerHTML += quantity;
-    button.appendChild(iconPlus);
+
+    const p = document.createElement('p');
+    p.textContent = 0;
+
+    iconPlus.addEventListener('click', () =>{
+        getObjects(name,cost,id);
+        p.textContent = findId(id).pQuantity;
+    });
+
+    iconMinus.addEventListener('click', e =>{
+        takeOffProducts(id);
+        p.textContent = findId(id).pQuantity;
+    });
+
+    button.append(iconMinus,p,iconPlus);
+    
 }
 
 function suma(cost){

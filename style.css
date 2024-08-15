@@ -24,7 +24,7 @@ body{
     background-color: var(--Rose100);
     min-height: 100dvh;
 }
-body, #products div, button{
+body, #products div, button, .order-section{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -105,8 +105,11 @@ section{
     justify-content: space-between;
     position: relative;
     .default-text{
-        position: absolute;
-        bottom: 0px;
+        /* position: absolute;
+        bottom: 10px;
+        margin: auto; */
+
+        align-self: flex-end;
     }
     #orders{
         display: grid;
@@ -153,7 +156,6 @@ section{
     'p h4'
     'delivery delivery'
     'button button';
-    position: relative;
     .delivery-container{
         display: flex;
         align-items: center;

@@ -23,14 +23,15 @@ body{
     padding: 2em;
     background-color: var(--Rose100);
     min-height: 100dvh;
+    position: relative;
 }
-body, #products div, button, .order-section{
+body, #products div, button, .order-section, .order-confirmed-container, header{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-main{
+.principal-container{
     display: grid;
     grid-template-columns: 1fr;
     gap: 30px;
@@ -103,7 +104,6 @@ section{
     height: auto;
     padding: 1.5em;
     justify-content: space-between;
-    position: relative;
     .default-text{
         /* position: absolute;
         bottom: 10px;
@@ -186,9 +186,44 @@ section{
         justify-self: self-start;
     }
 }
-
+.order-confirmed-section{
+    display: none;
+    padding: 1em;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: auto;
+    max-width: 90%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    .order-confirmed-container{
+        gap: 10px;
+        align-items: flex-start;
+    }
+    header{
+        align-items: flex-start ;
+    }
+    h1{
+        margin: 0;
+    }
+    img{
+        width: 30px;
+    }
+    p{
+        color: var(--Rose500);
+    }
+    button{
+        background-color: var(--buttonAdd);
+        border-radius: 20px;
+        border: none;
+        padding: 1em;
+        color :white;
+        font-weight: 500;
+        width: 100%;
+    }
+}
 @media(min-width: 720px ){
-    main{
+    .principal-container{
         grid-template-columns: 1fr 0.4fr;
     }
 }

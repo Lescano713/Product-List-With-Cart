@@ -10,7 +10,7 @@
   <title>Frontend Mentor | Product list with cart</title>
 </head>
 <body>
-  <main>
+  <main class="principal-container">
     <section class="product-section">
       <h1>Desserts</h1>
       <div id="products"></div>
@@ -20,6 +20,18 @@
       <div id="orders">
         <p class="default-text">Your added items will apper here</p>
       </div>
+    </section>
+    <section class="order-confirmed-section">
+      <main class="order-confirmed-container">
+        <img src="./assets/images/icon-order-confirmed.svg" alt="Icon Order Confirmed">
+        <header class="message-order">
+          <h1>Order Confirmed</h1>
+          <p>We hope you enjoy your food</p>
+        </header>
+        <footer id="products-confirmed">
+        </footer>
+        <button type="button">Start New Order</button>
+      </main>
     </section>
   </main>
 </body>

@@ -62,7 +62,8 @@ function uploadProducts(products){
 
 function takeOffProducts(id){
     findId(id).pQuantity -= 1;
-    uploadingCart(productsInCart)
+    uploadingCart(productsInCart);
+    orderTotal(2)
 }
 
 
@@ -80,7 +81,10 @@ function getObjects(name, cost,id){
     } else {
         findId(id).pQuantity += 1;
     }
+    
     uploadingCart(productsInCart);
+    orderTotal(2)
+    // orderTotal(product.pQuantity)
     console.log(productsInCart);
 }
 
@@ -140,6 +144,7 @@ function findId(id){
 }
 
 function buttonAddRemove(button,name,cost,id){
+    // orderTotal(2)
     button.innerHTML = "";
     // let amount = 0;
 

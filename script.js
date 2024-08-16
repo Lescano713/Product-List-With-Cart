@@ -103,6 +103,7 @@ function uploadingCart(array){
         pAmount.textContent = product.pQuantity;
         const iconRemove = document.createElement('img');
         iconRemove.src = icons.removeItem;
+        iconRemove.addEventListener('click', e => removeProduct(product.pId))
         const pPrice = document.createElement('p');
         pPrice.textContent = product.pCost;
         const ptotalAmount = document.createElement('p');
@@ -176,4 +177,16 @@ function buttonAddRemove(button,name,cost,id){
 
 function suma(cost){
     const numero = parseFloat(cost);
+}
+
+function removeProduct(id){
+    if (findId(id) && !productsInCart.length < 1) {
+        productsInCart.splice(findId(id), 1);
+        uploadingCart(productsInCart);
+        orderTotal(2)
+    } else {
+        console.log("no")
+        document.querySelector('section.order-section').style.background = "flex";
+
+    }
 }

@@ -132,6 +132,7 @@ function orderTotal(totalAmount){
     const h4 = document.createElement('h4');
     h4.textContent = `$${totalAmount}`
     const button = document.createElement('button');
+    button.addEventListener('click', e => showMessage())
     button.textContent = "Confirm Order";
 
     divDelivery.append(imgDelivery,pDelivery);
@@ -147,11 +148,11 @@ function findId(id){
 function buttonAddRemove(button,name,cost,id){
     // orderTotal(2)
     button.innerHTML = "";
-    // let amount = 0;
+    let amount = 0;
 
-    // if(findId(id)){
-    //     amount = findId(id).pQuantity;
-    // }
+    if(findId(id)){
+        amount = findId(id).pQuantity;
+    }
     button.classList.add('buttonAdd');
     const iconPlus = document.createElement('img');
     iconPlus.src = icons.incrementQuantity;
@@ -159,7 +160,7 @@ function buttonAddRemove(button,name,cost,id){
     iconMinus.src = icons.decrementQuantity;
 
     const p = document.createElement('p');
-    p.textContent = 0;
+    p.textContent = amount;
 
     iconPlus.addEventListener('click', () =>{
         getObjects(name,cost,id);
@@ -183,10 +184,18 @@ function removeProduct(id){
     if (findId(id) && !productsInCart.length < 1) {
         productsInCart.splice(findId(id), 1);
         uploadingCart(productsInCart);
+        // takeOffProducts(id)
         orderTotal(2)
     } else {
         console.log("no")
         document.querySelector('section.order-section').style.background = "flex";
 
     }
+}
+
+function showMessage(){
+    const sectionMessage = document.querySelector('.order-confirmed-section');
+
+    sectionMessage.style.display = "block"
+    console.log("non")
 }

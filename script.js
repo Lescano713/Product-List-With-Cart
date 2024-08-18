@@ -147,11 +147,11 @@ function findId(id){
 function buttonAddRemove(button,name,cost,id){
     // orderTotal(2)
     button.innerHTML = "";
-    // let amount = 0;
+    let amount = 0;
 
-    // if(findId(id)){
-    //     amount = findId(id).pQuantity;
-    // }
+    if(findId(id)){
+        amount = findId(id).pQuantity;
+    }
     button.classList.add('buttonAdd');
     const iconPlus = document.createElement('img');
     iconPlus.src = icons.incrementQuantity;
@@ -159,7 +159,7 @@ function buttonAddRemove(button,name,cost,id){
     iconMinus.src = icons.decrementQuantity;
 
     const p = document.createElement('p');
-    p.textContent = 0;
+    p.textContent = amount;
 
     iconPlus.addEventListener('click', () =>{
         getObjects(name,cost,id);

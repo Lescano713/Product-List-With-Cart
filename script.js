@@ -132,6 +132,7 @@ function orderTotal(totalAmount){
     const h4 = document.createElement('h4');
     h4.textContent = `$${totalAmount}`
     const button = document.createElement('button');
+    button.addEventListener('click', e => showMessage())
     button.textContent = "Confirm Order";
 
     divDelivery.append(imgDelivery,pDelivery);
@@ -183,10 +184,18 @@ function removeProduct(id){
     if (findId(id) && !productsInCart.length < 1) {
         productsInCart.splice(findId(id), 1);
         uploadingCart(productsInCart);
+        // takeOffProducts(id)
         orderTotal(2)
     } else {
         console.log("no")
         document.querySelector('section.order-section').style.background = "flex";
 
     }
+}
+
+function showMessage(){
+    const sectionMessage = document.querySelector('.order-confirmed-section');
+
+    sectionMessage.style.display = "block"
+    console.log("non")
 }

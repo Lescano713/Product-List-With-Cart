@@ -19,7 +19,7 @@ const icons ={
 const productsInCart = [];
 
 // uploadingCart();
-
+menos()
 function generateId(data){
     data.forEach((item ,index)=>{
         item.id = index + 1;
@@ -60,10 +60,16 @@ function uploadProducts(products){
     });
 }
 
-function takeOffProducts(id){
-    findId(id).pQuantity -= 1;
-    uploadingCart(productsInCart);
-    orderTotal(2)
+function takeOffProducts(id, button){
+    if (findId(id).pQuantity < 1) {
+        removeProduct(id)
+        uploadingCart(productsInCart);
+        button.innerHTML = "no"
+    } else {
+        findId(id).pQuantity -= 1;
+        uploadingCart(productsInCart);
+        // orderTotal(2)
+    }
 }
 
 
@@ -103,7 +109,11 @@ function uploadingCart(array){
         pAmount.textContent = product.pQuantity;
         const iconRemove = document.createElement('img');
         iconRemove.src = icons.removeItem;
-        iconRemove.addEventListener('click', e => removeProduct(product.pId))
+        iconRemove.addEventListener('click', e => {
+            removeProduct(product.pId);
+            // removeTarget(product.pId);
+
+        })
         const pPrice = document.createElement('p');
         pPrice.textContent = product.pCost;
         const ptotalAmount = document.createElement('p');
@@ -148,7 +158,7 @@ function findId(id){
 function buttonAddRemove(button,name,cost,id){
     // orderTotal(2)
     button.innerHTML = "";
-    let amount = 0;
+    let amount = 1;
 
     if(findId(id)){
         amount = findId(id).pQuantity;
@@ -168,8 +178,20 @@ function buttonAddRemove(button,name,cost,id){
     });
 
     iconMinus.addEventListener('click', e =>{
-        takeOffProducts(id);
-        p.textContent = findId(id).pQuantity;
+        
+        // const coso = findId(id).pQuantity;
+        // if (!coso) {
+        //     removeProduct(id);
+        //     console.log("b");
+        //     button.innerHTML = "no"
+        // } else{
+        //     p.textContent = findId(id).pQuantity;
+        //     console.log("a")
+            takeOffProducts(id, button);
+            // if (amount = ) {
+                
+            // }
+        // }
     });
 
     button.append(iconMinus,p,iconPlus);
@@ -181,7 +203,7 @@ function suma(cost){
 }
 
 function removeProduct(id){
-    if (findId(id) && !productsInCart.length < 1) {
+    if (findId(id)) {
         productsInCart.splice(findId(id), 1);
         uploadingCart(productsInCart);
         // takeOffProducts(id)
@@ -198,4 +220,25 @@ function showMessage(){
 
     sectionMessage.style.display = "block"
     console.log("non")
+}
+
+function removeTarget(id){
+    const target = findId(id);
+    const img = target.querySelector('img');
+    img.style.border = '3px solid red';
+}
+
+function menos(){
+    // productsInCart.forEach(product =>{
+    //     const nose = product.pQuantity < 0;
+    //     if (nose) {
+    //         const newArray = productsInCart.filter(item => item !== nose);
+            
+    //         uploadingCart(newArray);
+    //     }
+    // })
+    
+    const newArray = productsInCart.filter(item => item !== item.pQuantity < 0);
+            
+            uploadingCart(newArray);
 }

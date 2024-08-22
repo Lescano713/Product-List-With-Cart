@@ -56,7 +56,7 @@ function uploadProducts(products){
         h2.textContent = product.name ;
 
         const h3 = document.createElement('h3');
-        h3.textContent = `$${product.price}`;
+        h3.textContent = `$${product.price.toFixed(2)}`;
 
         div.append(img,button,small,h2,h3);
         productsContainer.appendChild(div);
@@ -65,14 +65,8 @@ function uploadProducts(products){
 
 function takeOffProducts(id){
     const product = findId(id);
-    if (product.quantity < 1){
-        removeProduct(product)
-        console.log('no')
-    } else{
-        console.log("si")
-        product.quantity -= 1; 
-        uploadingCart(productsInCart); 
-    }
+    product.quantity -= 1; 
+    uploadingCart(productsInCart); 
     
 }
 
@@ -80,7 +74,6 @@ function takeOffProducts(id){
 function addAmount(id, p){
     findId(id).quantity += 1;
     p.textContent = findId(id).quantity;
-    // uploadingCart();
 }
 
 
@@ -96,17 +89,17 @@ function uploadingCart(products){
         divText.classList.add('product-price');
         const h4 = document.createElement('h3');
         h4.textContent = product.name;
-        const pAmount = document.createElement('p');
-        pAmount.textContent = product.quantity;
+        const pAmount = document.createElement('span');
+        pAmount.textContent = `${product.quantity}x`;
         const iconRemove = document.createElement('img');
         iconRemove.src = icons.removeItem;
         iconRemove.addEventListener('click', e => {
             removeProduct(product.id);
         })
-        const pPrice = document.createElement('p');
-        pPrice.textContent = product.cost;
-        const ptotalAmount = document.createElement('p');
-
+        const pPrice = document.createElement('span');
+        pPrice.textContent = `$${product.price.toFixed(2)}`;
+        const ptotalAmount = document.createElement('span');
+        ptotalAmount.textContent = `$${sumAmount(product)}`;
         divText.append(h4,pAmount,pPrice,ptotalAmount);
         div.append(divText,iconRemove)
         ordersContainer.appendChild(div);}
@@ -114,12 +107,18 @@ function uploadingCart(products){
     })
     // console.log(products)
     if (products.length > 0 ) {
-        orderTotal(1)
+        orderTotal(products)
     }
     
 }
 
-function orderTotal(totalAmount){
+function orderTotal(products){
+    let total = parseFloat(0);
+    
+    products.forEach( product =>{
+        total += parseFloat(sumAmount(product));
+    })
+    
     // totalAmount = 1;
     const div = document.createElement('div');
     div.classList.add('order-total');
@@ -134,7 +133,7 @@ function orderTotal(totalAmount){
     const p = document.createElement('p');
     p.textContent = "Order Total";
     const h4 = document.createElement('h4');
-    h4.textContent = `$${totalAmount}`
+    h4.textContent = `$${total.toFixed(2)}`
     const button = document.createElement('button');
     button.addEventListener('click', e => showMessage())
     button.textContent = "Confirm Order";
@@ -162,7 +161,7 @@ function buttonAddRemove(button,id){
     const p = document.createElement('p');
     p.textContent = amount || 1;
 
-    // uploadingCart(productsInCart);
+
     iconPlus.addEventListener('click', () =>{
         addAmount(id,p)
     });
@@ -182,34 +181,34 @@ function removeProduct(id){
 }
 
 function showMessage(){
-    const sectionMessage = document.querySelector('.order-confirmed-section');
     const confirmedProducts = document.querySelector('footer');
+    document.body.classList.add("order-confirmed-show");
+    const newOrderButton = document.querySelector('#new-order');
+    newOrderButton.addEventListener('click', e=>{
+        document.body.classList.remove("order-confirmed-show");
+    })
+    confirmedProducts.innerHTML = "";
     productsInCart.forEach(product =>{
-        // if(!product.quantity < 1){
         const div = document.createElement('div');
         div.classList.add('product-in-car');
         const divText = document.createElement('div');
+        const img = document.createElement('img');
+        img.src = product.image.desktop;
         divText.classList.add('product-price');
         const h4 = document.createElement('h3');
         h4.textContent = product.name;
         const pAmount = document.createElement('p');
         pAmount.textContent = product.quantity;
-        const iconRemove = document.createElement('img');
-        iconRemove.src = icons.removeItem;
-        iconRemove.addEventListener('click', e => {
-            removeProduct(product.id);
-        })
         const pPrice = document.createElement('p');
         pPrice.textContent = product.cost;
         const ptotalAmount = document.createElement('p');
 
         divText.append(h4,pAmount,pPrice,ptotalAmount);
-        div.append(divText,iconRemove)
+        div.append(img,divText)
         confirmedProducts.appendChild(div);
-    // }
         
     })
-    sectionMessage.style.display = "block"
+
     console.log("non")
 }
 
@@ -218,10 +217,16 @@ function addToArray(product){
         productsInCart.push(product);
         product.quantity = 1;
     }else if(product.quantity === 0){
-        const index = productsInCart.findIndex( p => p.id === product.id)
-        productsInCart.splice(index, 1);
+        removeProduct(product.id)
     }
-    // productsInCart.push(product);
+
     uploadingCart(productsInCart)
     console.log(productsInCart)
+}
+
+function sumAmount(product){
+    const amount = parseFloat(product.quantity);
+    const price = parseFloat(product.price);
+    return (amount*price).toFixed(2)
+    
 }

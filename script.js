@@ -17,19 +17,20 @@ const icons ={
 }
 
 const productsInCart = [];
-// console.log(productsInCart)
-// uploadingCart();
-// menos()
+
 function generateId(data){
     data.forEach((item ,index)=>{
         item.id = index + 1;
+        item.quantity = 0;
     })
 }
     
 
 function uploadProducts(products){
-    // console.log(products);
+    // 
+    
     products.forEach(product => {
+        // console.log(product);
         const div = document.createElement('div');
         div.classList.add('product-container');
 
@@ -43,7 +44,9 @@ function uploadProducts(products){
         button.appendChild(icon);
         button.innerHTML += " Add to cart";
         button.addEventListener('click',e =>{
-            buttonAddRemove(button,product.name,product.price,product.id)
+            addToArray(product);
+            buttonAddRemove(button, product.id)
+            
             img.style.border = '3px solid red';});
 
         const small = document.createElement('small');
@@ -62,68 +65,55 @@ function uploadProducts(products){
 
 function takeOffProducts(id){
     const product = findId(id);
-    if (product.pQuantity <= 1){
-        removeProduct(id)
-        console.log(findId(id))
+    if (product.quantity < 1){
+        removeProduct(product)
+        console.log('no')
     } else{
-        // console.log("si")
-        product.pQuantity -= 1;  
-        // uploadingCart();
+        console.log("si")
+        product.quantity -= 1; 
+        uploadingCart(productsInCart); 
     }
-    uploadingCart(); 
+    
 }
 
-
-function getObjects(name, cost,id){
-    if(!findId(id)){
-        const product ={
-            pName: name,
-            pCost: cost,
-            pId: id,
-            pQuantity: 0,
-        }
-        productsInCart.push(product);
-        // uploadingCart()
-        
-    }
-}
 
 function addAmount(id, p){
-    findId(id).pQuantity += 1;
-    p.textContent = findId(id).pQuantity;
-    uploadingCart();
+    findId(id).quantity += 1;
+    p.textContent = findId(id).quantity;
+    // uploadingCart();
 }
 
 
-function uploadingCart(){
+function uploadingCart(products){
     ordersContainer.innerHTML = "";
     document.querySelector('section.order-section').style.background = "none";
-
-    productsInCart.forEach(product =>{
+    // console.log(products);
+    products.forEach(product =>{
+        if(!product.quantity < 1){
         const div = document.createElement('div');
         div.classList.add('product-in-car');
         const divText = document.createElement('div');
         divText.classList.add('product-price');
         const h4 = document.createElement('h3');
-        h4.textContent = product.pName;
+        h4.textContent = product.name;
         const pAmount = document.createElement('p');
-        pAmount.textContent = product.pQuantity;
+        pAmount.textContent = product.quantity;
         const iconRemove = document.createElement('img');
         iconRemove.src = icons.removeItem;
         iconRemove.addEventListener('click', e => {
-            removeProduct(product.pId);
+            removeProduct(product.id);
         })
         const pPrice = document.createElement('p');
-        pPrice.textContent = product.pCost;
+        pPrice.textContent = product.cost;
         const ptotalAmount = document.createElement('p');
 
         divText.append(h4,pAmount,pPrice,ptotalAmount);
         div.append(divText,iconRemove)
-        ordersContainer.appendChild(div);
+        ordersContainer.appendChild(div);}
         
     })
-    console.log(productsInCart)
-    if (productsInCart.length > 0 ) {
+    // console.log(products)
+    if (products.length > 0 ) {
         orderTotal(1)
     }
     
@@ -155,14 +145,14 @@ function orderTotal(totalAmount){
 }
 
 function findId(id){
-    const existingProduct = productsInCart.find(p => p.pId === id);
+    const existingProduct = productsInCart.find(p => p.id === id);
     return existingProduct
 }
 
-function buttonAddRemove(button,name,cost,id){
+function buttonAddRemove(button,id){
     button.innerHTML = "";
     button.classList.add('buttonAdd');
-    let amount = 1;
+    let amount;
     
     const iconPlus = document.createElement('img');
     iconPlus.src = icons.incrementQuantity;
@@ -170,15 +160,10 @@ function buttonAddRemove(button,name,cost,id){
     iconMinus.src = icons.decrementQuantity;
 
     const p = document.createElement('p');
-    const product = findId(id);
-    p.textContent = 1;
+    p.textContent = amount || 1;
 
-    // if (!product) {
-    //     getObjects(name, cost, id);
-    // }
-    // uploadingCart();
+    // uploadingCart(productsInCart);
     iconPlus.addEventListener('click', () =>{
-        getObjects(name,cost,id);
         addAmount(id,p)
     });
 
@@ -190,48 +175,53 @@ function buttonAddRemove(button,name,cost,id){
     
 }
 
-function suma(cost){
-    const numero = parseFloat(cost);
-}
-
 function removeProduct(id){
-    const index = productsInCart.findIndex( p => p.pId === id)
-    // if (index !== -1) {
+    const index = productsInCart.findIndex( p => p.id === id)
         productsInCart.splice(index, 1);
-        uploadingCart();
-        // takeOffProducts(id)
-        // orderTotal(2)
-    // } else {
-    //     console.log("no")
-    //     document.querySelector('section.order-section').style.background = "flex";
-
-    // }
+        uploadingCart(productsInCart);
 }
 
 function showMessage(){
     const sectionMessage = document.querySelector('.order-confirmed-section');
+    const confirmedProducts = document.querySelector('footer');
+    productsInCart.forEach(product =>{
+        // if(!product.quantity < 1){
+        const div = document.createElement('div');
+        div.classList.add('product-in-car');
+        const divText = document.createElement('div');
+        divText.classList.add('product-price');
+        const h4 = document.createElement('h3');
+        h4.textContent = product.name;
+        const pAmount = document.createElement('p');
+        pAmount.textContent = product.quantity;
+        const iconRemove = document.createElement('img');
+        iconRemove.src = icons.removeItem;
+        iconRemove.addEventListener('click', e => {
+            removeProduct(product.id);
+        })
+        const pPrice = document.createElement('p');
+        pPrice.textContent = product.cost;
+        const ptotalAmount = document.createElement('p');
 
+        divText.append(h4,pAmount,pPrice,ptotalAmount);
+        div.append(divText,iconRemove)
+        confirmedProducts.appendChild(div);
+    // }
+        
+    })
     sectionMessage.style.display = "block"
     console.log("non")
 }
 
-function removeTarget(id){
-    const target = findId(id);
-    const img = target.querySelector('img');
-    img.style.border = '3px solid red';
-}
-
-function menos(){
-    // productsInCart.forEach(product =>{
-    //     const nose = product.pQuantity < 0;
-    //     if (nose) {
-    //         const newArray = productsInCart.filter(item => item !== nose);
-            
-    //         uploadingCart(newArray);
-    //     }
-    // })
-    
-    const newArray = productsInCart.filter(item => item !== item.pQuantity < 0);
-            
-            uploadingCart(newArray);
+function addToArray(product){
+    if (!findId(product.id)) {
+        productsInCart.push(product);
+        product.quantity = 1;
+    }else if(product.quantity === 0){
+        const index = productsInCart.findIndex( p => p.id === product.id)
+        productsInCart.splice(index, 1);
+    }
+    // productsInCart.push(product);
+    uploadingCart(productsInCart)
+    console.log(productsInCart)
 }

@@ -105,44 +105,52 @@ function uploadingCart(products){
         ordersContainer.appendChild(div);}
         
     })
-    // console.log(products)
+
     if (products.length > 0 ) {
-        orderTotal(products)
+        const h2 = document.querySelector('h2.order-amount');
+        h2.textContent = `Your cart (${products.length})`;
+        orderTotal(products, ordersContainer);
+        uploadingDelivery();
     }
     
 }
 
-function orderTotal(products){
+function orderTotal(products,container){
     let total = parseFloat(0);
     
     products.forEach( product =>{
         total += parseFloat(sumAmount(product));
     })
-    
-    // totalAmount = 1;
+
     const div = document.createElement('div');
-    div.classList.add('order-total');
+    div.classList.add('order-total')
+    const p = document.createElement('p');
+    p.textContent = "Order Total";
+    const h4 = document.createElement('h4');
+    h4.textContent = `$${total.toFixed(2)}`
+    div.append(p,h4)
+    container.appendChild(div)
+    
+}
+function uploadingDelivery(){
+    const div = document.createElement('div');
+    div.classList.add('delivery-container');
 
     const divDelivery = document.createElement('div');
-    divDelivery.classList.add('delivery-container');
+    divDelivery.classList.add('delivery');
     const pDelivery = document.createElement('p');
     pDelivery.textContent = "This is a carbon-neutral delivery";
     const imgDelivery = document.createElement('img');
     imgDelivery.src = icons.neutral;
 
-    const p = document.createElement('p');
-    p.textContent = "Order Total";
-    const h4 = document.createElement('h4');
-    h4.textContent = `$${total.toFixed(2)}`
     const button = document.createElement('button');
     button.addEventListener('click', e => showMessage())
     button.textContent = "Confirm Order";
 
     divDelivery.append(imgDelivery,pDelivery);
-    div.append(p,h4,divDelivery,button);
+    div.append(divDelivery,button);
     ordersContainer.appendChild(div);
 }
-
 function findId(id){
     const existingProduct = productsInCart.find(p => p.id === id);
     return existingProduct
@@ -198,10 +206,11 @@ function showMessage(){
         const h4 = document.createElement('h3');
         h4.textContent = product.name;
         const pAmount = document.createElement('p');
-        pAmount.textContent = product.quantity;
+        pAmount.textContent = `${product.quantity}x`;
         const pPrice = document.createElement('p');
-        pPrice.textContent = product.cost;
+        pPrice.textContent = `$${product.price.toFixed(2)}`;
         const ptotalAmount = document.createElement('p');
+        ptotalAmount.textContent = `$${sumAmount(product)}`;
 
         divText.append(h4,pAmount,pPrice,ptotalAmount);
         div.append(img,divText)
@@ -209,7 +218,7 @@ function showMessage(){
         
     })
 
-    console.log("non")
+    orderTotal(productsInCart,confirmedProducts);
 }
 
 function addToArray(product){

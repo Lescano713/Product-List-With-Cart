@@ -35,6 +35,7 @@ body, #products div, button, .order-section, .order-confirmed-container, header{
     display: grid;
     grid-template-columns: 1fr;
     gap: 30px;
+    z-index: 700;
     width: 100%;
 }
 section{
@@ -128,25 +129,7 @@ section{
         width: 10px;
     }
 }
-.product-in-car{
-    display: flex;
-    justify-content: space-between;
-    padding: 1em 0;
-    border-bottom: 1px solid var(--Rose300);
-    .product-price{
-        display: grid;
-        h3{
-            font-size: 14px;
-            font-weight: 500;
-        }
-        h4{
-            font-size: 16px;
-        }
-        p{
-            font-size: 16.5px;
-        }
-    }
-}
+
 .order-total{
     margin-top: 20px;
     display: grid;
@@ -175,6 +158,7 @@ section{
         font-weight: 500;
         width: 100%;
         grid-area: button;
+        cursor: pointer;
     }
     h4{
         grid-area: h4;
@@ -186,12 +170,42 @@ section{
         justify-self: self-start;
     }
 }
+
+
+.product-in-car{
+    display: flex;
+    justify-content: space-between;
+    padding: 1em 0;
+    border-bottom: 1px solid var(--Rose300);
+    .product-price{
+        display: grid;
+        width: 100%;
+        grid-template-areas: 
+        'h3 h3 h3';
+        h3{
+            grid-area: h3;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        h4{
+            font-size: 16px;
+        }
+        span{
+            font-size: 16.5px;
+            grid-row: 2;
+        }
+    }
+}
+
+
 .order-confirmed-section{
     display: none;
+    filter: none;
     padding: 1em;
     position: fixed;
     left: 50%;
     top: 50%;
+    z-index: 999;
     width: auto;
     max-width: 90%;
     transform: translate(-50%, -50%);
@@ -203,10 +217,22 @@ section{
     header{
         align-items: flex-start ;
     }
+    footer{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--Rose100);
+        img{
+            width: 50px;
+        }
+        .product-in-car{
+            padding: 1em 0.5em;
+        }
+    }
     h1{
         margin: 0;
     }
-    img{
+    .icon-check{
         width: 30px;
     }
     p{
@@ -220,6 +246,17 @@ section{
         color :white;
         font-weight: 500;
         width: 100%;
+        cursor: pointer;
+    }
+}
+
+.order-confirmed-show{
+    overflow:unset;
+    .principal-container{
+        filter: grayscale(20%) blur(3px);
+    }
+    .order-confirmed-section{
+        display: block;
     }
 }
 @media(min-width: 720px ){

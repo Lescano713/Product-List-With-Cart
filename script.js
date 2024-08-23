@@ -5,6 +5,13 @@ fetch('data.json')
 .then(res => res.json())
 .then(data =>{ uploadProducts(data); generateId(data)});
 
+//cambiar imagenes segun el dispositivo
+//restaurar aparencia de boton
+//padding y margenes en your cart
+//color en amount of products
+//restaurar your cart if the array is empty
+//add more animations
+//put the icons into a div
 
 
 const icons ={
@@ -32,33 +39,26 @@ function uploadProducts(products){
     products.forEach(product => {
         // console.log(product);
         const div = document.createElement('div');
+        const addButton = document.createElement('div');
+        const productInfo = document.createElement('div');
+        
         div.classList.add('product-container');
+        productInfo.classList.add('product-info');
+        addButton.classList.add('product-img-button');
 
         const img = document.createElement('img');
         img.src = product.image.mobile;
         img.alt = product.name;
 
-        const button = document.createElement('button');
-        const icon = document.createElement('img');
-        icon.src = icons.addToCart;
-        button.appendChild(icon);
-        button.innerHTML += " Add to cart";
-        button.addEventListener('click',e =>{
-            addToArray(product);
-            buttonAddRemove(button, product.id)
-            
-            img.style.border = '3px solid red';});
-
-        const small = document.createElement('small');
-        small.textContent = product.category;
-
-        const h2 = document.createElement('h2');
-        h2.textContent = product.name ;
-
-        const h3 = document.createElement('h3');
-        h3.textContent = `$${product.price.toFixed(2)}`;
-
-        div.append(img,button,small,h2,h3);
+        buttonInitial(addButton, product,img);
+        
+        productInfo.innerHTML = 
+        `<small>${product.category}</small>
+        <h2>${product.name}</h2>
+        <h3>${product.price.toFixed(2)}</h3>
+        `;
+        addButton.appendChild(img)
+        div.append(addButton,productInfo);
         productsContainer.appendChild(div);
     });
 }
@@ -106,9 +106,13 @@ function uploadingCart(products){
         
     })
 
-    if (products.length > 0 ) {
+    if (products.length >= 0) {
         const h2 = document.querySelector('h2.order-amount');
-        h2.textContent = `Your cart (${products.length})`;
+        h2.textContent = `Your cart (${productsInCart.length})`;
+        
+        console.log(products.length)
+    }
+    if(products.length > 0){
         orderTotal(products, ordersContainer);
         uploadingDelivery();
     }
@@ -160,6 +164,8 @@ function buttonAddRemove(button,id){
     button.innerHTML = "";
     button.classList.add('buttonAdd');
     let amount;
+    // amount = findId(id).quantity || 0;
+    amount = !findId(id) ? 0 : findId(id).quantity; 
     
     const iconPlus = document.createElement('img');
     iconPlus.src = icons.incrementQuantity;
@@ -167,7 +173,7 @@ function buttonAddRemove(button,id){
     iconMinus.src = icons.decrementQuantity;
 
     const p = document.createElement('p');
-    p.textContent = amount || 1;
+    p.textContent = amount;
 
 
     iconPlus.addEventListener('click', () =>{
@@ -184,8 +190,8 @@ function buttonAddRemove(button,id){
 
 function removeProduct(id){
     const index = productsInCart.findIndex( p => p.id === id)
-        productsInCart.splice(index, 1);
-        uploadingCart(productsInCart);
+    productsInCart.splice(index, 1);
+    uploadingCart(productsInCart);
 }
 
 function showMessage(){
@@ -230,7 +236,7 @@ function addToArray(product){
     }
 
     uploadingCart(productsInCart)
-    console.log(productsInCart)
+    // console.log(productsInCart)
 }
 
 function sumAmount(product){
@@ -238,4 +244,34 @@ function sumAmount(product){
     const price = parseFloat(product.price);
     return (amount*price).toFixed(2)
     
+}
+
+function buttonInitial(container, product, img){
+    const button = document.createElement('button');
+    button.classList.remove('buttonAdd')
+    const icon = document.createElement('img');
+    icon.src = icons.addToCart;
+    button.appendChild(icon);
+    button.innerHTML += " Add to cart";
+    button.addEventListener('click',e =>{
+        addToArray(product);
+        buttonAddRemove(button, product.id);
+        targetProduct(product,img)
+    });
+    container.append(button);
+}
+
+function showButton(id){
+    if(!findId(id) || findId(id).quantity < 1 ){
+        // buttonInitial
+    }
+}
+
+function targetProduct(product,img){
+    if (!findId(product.id)) {
+        img.style.border = 'none';
+    } else {
+        img.style.border = '3px solid red';
+        
+    }
 }

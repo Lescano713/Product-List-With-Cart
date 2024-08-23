@@ -53,36 +53,49 @@ section{
         grid-template-columns: repeat(auto-fit ,minmax(13em,1fr));
         width: 100%;
         gap: 20px;
-        button{
-            align-self: center;
-            padding: 0.7em;
-            border-radius: 19px;
-            border: 1px solid var(--Rose500);
-            color: var(--Rose900);
-            font-weight: 600;
-            margin-top: -20px;
-            background-color: white;
-            cursor: pointer;
-            flex-direction: row;
-            width: auto;
-            img{
-                width: 15px;
+        .product-container{
+            align-items:flex-start;
+            text-align: left;
+            .product-img-button{
+                position: relative;
+                img{
+                    width: 100%;
+                    height: auto;
+                    border-radius: 10px;
+                }
+                button{
+                    /* align-self: center; */
+                    padding: 0.7em;
+                    border-radius: 19px;
+                    border: 1px solid var(--Rose500);
+                    color: var(--Rose900);
+                    font-weight: 600;
+                    position: absolute;
+                    bottom: -10px;
+                    left: 50%;
+                    transform: translate(-50%, 10px);
+                    background-color: white;
+                    cursor: pointer;
+                    flex-direction: row;
+                    width: 10em;
+                    img{
+                        width: 18px;
+                    }
+                }
+                .buttonAdd{
+                    background-color: var(--buttonAdd);
+                    width: 70%;
+                    justify-content: space-around;
+                    color: white;
+                }
+            }
+            
+            .product-info{
+                width: 100%;
+                margin-top: 20px;
+                align-items: flex-start;
             }
         }
-        .buttonAdd{
-            background-color: var(--buttonAdd);
-            width: 70%;
-            justify-content: space-around;
-            color: white;
-        }
-        div{
-            align-items:flex-start;
-        }
-    }
-    img{
-        width: 100%;
-        height: auto;
-        border-radius: 10px;
     }
     h2{
         color: var(--Rose900);

@@ -82,7 +82,6 @@ function uploadingCart(products){
     document.querySelector('section.order-section').style.background = "none";
     // console.log(products);
     products.forEach(product =>{
-        if(!product.quantity < 1){
         const div = document.createElement('div');
         div.classList.add('product-in-car');
         const divText = document.createElement('div');
@@ -97,12 +96,12 @@ function uploadingCart(products){
             removeProduct(product.id);
         })
         const pPrice = document.createElement('span');
-        pPrice.textContent = `$${product.price.toFixed(2)}`;
+        pPrice.textContent = `@$${product.price.toFixed(2)}`;
         const ptotalAmount = document.createElement('span');
         ptotalAmount.textContent = `$${sumAmount(product)}`;
         divText.append(h4,pAmount,pPrice,ptotalAmount);
         div.append(divText,iconRemove)
-        ordersContainer.appendChild(div);}
+        ordersContainer.appendChild(div);
         
     })
 
@@ -160,7 +159,7 @@ function findId(id){
     return existingProduct
 }
 
-function buttonAddRemove(button,id){
+function buttonAddRemove(button,id,img){
     button.innerHTML = "";
     button.classList.add('buttonAdd');
     let amount;
@@ -182,6 +181,7 @@ function buttonAddRemove(button,id){
 
     iconMinus.addEventListener('click', e =>{
         takeOffProducts(id, p);
+        targetProduct(id,img)
     });
 
     button.append(iconMinus,p,iconPlus);
@@ -191,6 +191,7 @@ function buttonAddRemove(button,id){
 function removeProduct(id){
     const index = productsInCart.findIndex( p => p.id === id)
     productsInCart.splice(index, 1);
+    // targetProduct(findId(id), findId(id).image.desktop)
     uploadingCart(productsInCart);
 }
 
@@ -255,8 +256,8 @@ function buttonInitial(container, product, img){
     button.innerHTML += " Add to cart";
     button.addEventListener('click',e =>{
         addToArray(product);
-        buttonAddRemove(button, product.id);
-        targetProduct(product,img)
+        buttonAddRemove(button, product.id,img);
+        targetProduct(product.id,img)
     });
     container.append(button);
 }
@@ -267,11 +268,15 @@ function showButton(id){
     }
 }
 
-function targetProduct(product,img){
-    if (!findId(product.id)) {
+function targetProduct(id,img){
+    if (!findId(id) || findId(id).quantity < 1) {
         img.style.border = 'none';
     } else {
         img.style.border = '3px solid red';
         
     }
 }
+
+// function dependingButton(product){
+//     if(!findId(product.id))
+// }

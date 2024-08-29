@@ -199,6 +199,10 @@ section{
             grid-row: 2;
         }
     }
+    .product-price span:nth-of-type(1){
+        color: var(--Red);
+        font-weight: 700;
+    }
 }
 
 

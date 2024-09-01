@@ -114,6 +114,9 @@ section{
     border-radius: 10px;
     align-self: flex-start;
     min-height: 15em;
+    max-width: 90%;
+    width: 20em;
+    min-width: 30% ;
     background: url('./assets/images/illustration-empty-cart.svg') no-repeat center;
     height: auto;
     padding: 1.5em;
@@ -276,8 +279,8 @@ section{
         display: block;
     }
 }
-@media(min-width: 720px ){
+@media(min-width: 820px ){
     .principal-container{
-        grid-template-columns: 1fr 0.4fr;
+        grid-template-columns: 1fr 0.5fr;
     }
 }

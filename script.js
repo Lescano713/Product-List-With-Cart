@@ -162,6 +162,8 @@ function findId(id){
 function buttonAddRemove(button,id,img){
     button.innerHTML = "";
     button.classList.add('buttonAdd');
+    button.type = 'button';
+    button.setAttribute('aria-label', `button ${id}`)
     let amount;
     // amount = findId(id).quantity || 0;
     amount = !findId(id) ? 0 : findId(id).quantity; 

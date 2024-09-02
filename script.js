@@ -237,7 +237,7 @@ function addToArray(product){
     }else if(product.quantity < 1){
         removeProduct(product.id)
     }
-    if (productsInCart.length < 1) {
+    if (productsInCart.length <= 0) {
         restore()
     }else{
         uploadingCart(productsInCart)
@@ -292,3 +292,29 @@ function restore(){
 // function dependingButton(product){
 //     if(!findId(product.id))
 // }
+
+function buttonAmount(){
+    const div = document.createElement('div');
+    div.innerHTML = `
+    <button type='button' id="take-off-product">
+        <img src="./assets/images/icon-decrement-quantity.svg"/>
+    </button>
+    <p></p>
+    <button type='button' id="add-product">
+        <img src="./assets/images/icon-increment-quantity.svg"/>
+    </button>`
+
+}
+
+function addEvents(){
+    const takeOff = document.querySelector('#take-off-product');
+    const add = document.querySelector('add-product');
+
+    takeOff.addEventListener('click', e =>{
+        addAmount(id,p)
+    });
+    add.addEventListener('click', e =>{
+        takeOffProducts(id, p);
+        targetProduct(id,img)
+    });
+}

@@ -234,11 +234,14 @@ function addToArray(product){
     if (!findId(product.id)) {
         productsInCart.push(product);
         product.quantity = 1;
-    }else if(product.quantity === 0){
+    }else if(product.quantity < 1){
         removeProduct(product.id)
     }
-
-    uploadingCart(productsInCart)
+    if (productsInCart.length < 1) {
+        restore()
+    }else{
+        uploadingCart(productsInCart)
+    }
     // console.log(productsInCart)
 }
 
@@ -277,6 +280,13 @@ function targetProduct(id,img){
         img.style.border = '3px solid red';
         
     }
+}
+
+function restore(){
+    const orderSection =  document.querySelector('.order-section');
+    orderSection.style.background = "url('./assets/images/illustration-empty-cart.svg') no-repeat center";
+    ordersContainer.innerHTML = `
+    <p class="default-text" >Your added items will apper here</p>`
 }
 
 // function dependingButton(product){

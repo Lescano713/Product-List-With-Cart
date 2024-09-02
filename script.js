@@ -34,8 +34,7 @@ function generateId(data){
     
 
 function uploadProducts(products){
-    // 
-    
+
     products.forEach(product => {
         // console.log(product);
         const div = document.createElement('div');
@@ -63,17 +62,16 @@ function uploadProducts(products){
     });
 }
 
+//function to add and remove products 
+
 function takeOffProducts(id){
     const product = findId(id);
     product.quantity -= 1; 
-    uploadingCart(productsInCart); 
-    
 }
 
 
-function addAmount(id, p){
+function addAmount(id){
     findId(id).quantity += 1;
-    p.textContent = findId(id).quantity;
 }
 
 
@@ -159,36 +157,7 @@ function findId(id){
     return existingProduct
 }
 
-function buttonAddRemove(button,id,img){
-    button.innerHTML = "";
-    button.classList.add('buttonAdd');
-    button.type = 'button';
-    button.setAttribute('aria-label', `button ${id}`)
-    let amount;
-    // amount = findId(id).quantity || 0;
-    amount = !findId(id) ? 0 : findId(id).quantity; 
-    
-    const iconPlus = document.createElement('img');
-    iconPlus.src = icons.incrementQuantity;
-    const iconMinus = document.createElement('img');
-    iconMinus.src = icons.decrementQuantity;
 
-    const p = document.createElement('p');
-    p.textContent = amount;
-
-
-    iconPlus.addEventListener('click', () =>{
-        addAmount(id,p)
-    });
-
-    iconMinus.addEventListener('click', e =>{
-        takeOffProducts(id, p);
-        targetProduct(id,img)
-    });
-
-    button.append(iconMinus,p,iconPlus);
-    
-}
 
 function removeProduct(id){
     const index = productsInCart.findIndex( p => p.id === id)
@@ -237,7 +206,7 @@ function addToArray(product){
     }else if(product.quantity < 1){
         removeProduct(product.id)
     }
-    if (productsInCart.length <= 0) {
+    if (productsInCart.length === 0) {
         restore()
     }else{
         uploadingCart(productsInCart)
@@ -254,24 +223,20 @@ function sumAmount(product){
 
 function buttonInitial(container, product, img){
     const button = document.createElement('button');
-    button.classList.remove('buttonAdd')
-    const icon = document.createElement('img');
-    icon.src = icons.addToCart;
-    button.appendChild(icon);
-    button.innerHTML += " Add to cart";
+    button.innerHTML = "";
+    button.classList.add('add-to-cart')
+    button.innerHTML = `<img src="./assets/images/icon-add-to-cart.svg" alt="cart-icon" />
+    <p> Add to cart</p>`
     button.addEventListener('click',e =>{
         addToArray(product);
-        buttonAddRemove(button, product.id,img);
+        buttonAmount(button,product.id,img)
         targetProduct(product.id,img)
+        // console.log(e.target);
     });
     container.append(button);
 }
 
-function showButton(id){
-    if(!findId(id) || findId(id).quantity < 1 ){
-        // buttonInitial
-    }
-}
+
 
 function targetProduct(id,img){
     if (!findId(id) || findId(id).quantity < 1) {
@@ -289,32 +254,40 @@ function restore(){
     <p class="default-text" >Your added items will apper here</p>`
 }
 
-// function dependingButton(product){
-//     if(!findId(product.id))
-// }
-
-function buttonAmount(){
+function buttonAmount(button,id,img){
+    button.innerHTML = "";
     const div = document.createElement('div');
-    div.innerHTML = `
-    <button type='button' id="take-off-product">
+    div.classList.add('buttonIcons')
+    let amount;
+    amount = !findId(id) ? 0 : findId(id).quantity; 
+    if (amount === 0 || !findId(id)) {
+        button.innerHTML = `<img src="./assets/images/icon-add-to-cart.svg" alt="cart-icon" />
+    <p> Add to cart</p>`;
+    } else {
+        div.innerHTML = `
+    <button type='button' class="take-off-product">
         <img src="./assets/images/icon-decrement-quantity.svg"/>
     </button>
-    <p></p>
-    <button type='button' id="add-product">
+    <p>${amount}</p>
+    <button type='button' class="add-product">
         <img src="./assets/images/icon-increment-quantity.svg"/>
     </button>`
-
+    
+    button.appendChild(div);
+    addEvents(div,id,img);
+    }
+    
 }
 
-function addEvents(){
-    const takeOff = document.querySelector('#take-off-product');
-    const add = document.querySelector('add-product');
+function addEvents(button,id,img){
+    const takeOff = button.querySelector('.take-off-product');
+    const add = button.querySelector('.add-product');
 
     takeOff.addEventListener('click', e =>{
-        addAmount(id,p)
+        takeOffProducts(id);
+        targetProduct(id,img);
     });
     add.addEventListener('click', e =>{
-        takeOffProducts(id, p);
-        targetProduct(id,img)
+        addAmount(id)
     });
 }
